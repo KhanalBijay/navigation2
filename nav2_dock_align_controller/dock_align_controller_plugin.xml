@@ -1,0 +1,7 @@
+<library path="dock_align_controller_core">
+    <class type="nav2_dock_align_controller::DockAlignController" base_class_type="nav2_core::Controller">
+        <description>
+            nav2_dock_align_controller
+        </description>
+    </class>
+</library>

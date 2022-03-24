@@ -1,0 +1,194 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+	<model name="base">
+		<link name="laser_link">
+			<self_collide>false</self_collide>
+			<pose frame="">-0.007483469883342291 0.0033754847892451894 0.11526812773283998 0.0 -0.0 0</pose>
+			<inertial>
+				<pose frame="">0.0 0.0 0.0 0 0 0</pose>
+				<mass>1.3392997077577373</mass>
+				<inertia>
+					<ixx>0.018429048296082506</ixx>
+					<ixy>3.302403910604428e-05</ixy>
+					<ixz>0.0013145447819121392</ixz>
+					<iyy>0.018836788159218718</iyy>
+					<iyz>-0.0005242139620616594</iyz>
+					<izz>0.001195455114779029</izz>
+				</inertia>
+			</inertial>
+			<collision name="laser_link_collision">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/laser_link.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</collision>
+			<visual name="laser_link_visual">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/laser_link.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</visual>
+			<sensor name="laser" type="ray">
+			    <pose>0 0 0 0 -0 0</pose>
+		        <plugin name='laser' filename='libgazebo_ros_ray_sensor.so'>
+		          <ros>
+		            <remapping>laser/out:=scan</remapping>
+		          </ros>
+		          <output_type>sensor_msgs/LaserScan</output_type>
+		        </plugin>
+		        <ray>
+		          <scan>
+		            <horizontal>
+		              <samples>181</samples>
+		              <resolution>1</resolution>
+		              <min_angle>-3.1415</min_angle>
+		              <max_angle>3.1415</max_angle>
+		            </horizontal>
+		          </scan>
+		          <range>
+		            <min>0.08</min>
+		            <max>8</max>
+		            <resolution>0.05</resolution>
+		          </range>
+		        </ray>
+		        <always_on>1</always_on>
+		        <update_rate>10</update_rate>
+		        <visualize>true</visualize>
+			    </sensor>
+		</link>
+		<link name="LeftWheel">
+			<self_collide>false</self_collide>
+			<pose frame="">-3.1260967113250403e-07 0.10584927198442211 0.03432820357070519 0.0 -0.0 0.0</pose>
+			<inertial>
+				<pose frame="">0.0 0.0 0.0 0 0 0</pose>
+				<mass>1.2739888254030707</mass>
+				<inertia>
+					<ixx>0.016363845941469595</ixx>
+					<ixy>4.206910185261029e-08</ixy>
+					<ixz>1.6076041289089997e-08</ixz>
+					<iyy>0.0023282252749369987</iyy>
+					<iyz>-0.004629195651435269</iyz>
+					<izz>0.014860934929017086</izz>
+				</inertia>
+			</inertial>
+			<collision name="LeftWheel_collision">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/LeftWheel.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</collision>
+			<visual name="LeftWheel_visual">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/LeftWheel.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</visual>
+		</link>
+		<link name="RightWheel">
+			<self_collide>false</self_collide>
+			<pose frame="">-3.111031151585624e-07 -0.1059566562533042 0.034328382688185076 0.0 -0.0 0.0</pose>
+			<inertial>
+				<pose frame="">0.0 0.0 0.0 0 0 0</pose>
+				<mass>1.2801581457812472</mass>
+				<inertia>
+					<ixx>0.016472844027210144</ixx>
+					<ixy>-4.2069096636980875e-08</ixy>
+					<ixz>1.6076039900701964e-08</ixz>
+					<iyy>0.0023363366786385634</iyy>
+					<iyz>0.004656361027733868</iyz>
+					<izz>0.014962647178692919</izz>
+				</inertia>
+			</inertial>
+			<collision name="RightWheel_collision">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/RightWheel.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</collision>
+			<visual name="RightWheel_visual">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/RightWheel.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</visual>
+		</link>
+		<link name="base_link">
+			<self_collide>false</self_collide>
+			<pose frame="">1.9890008891731733e-05 0.0010899148601920296 0.04703550929106814 0.0 -0.0 0.0</pose>
+			<inertial>
+				<pose frame="">0.0 0.0 0.0 0 0 0</pose>
+				<mass>8.259457705691345</mass>
+				<inertia>
+					<ixx>0.09131090467365767</ixx>
+					<ixy>-8.93352293547723e-08</ixy>
+					<ixz>-1.2694826969483998e-05</ixz>
+					<iyy>0.06744203370802365</iyy>
+					<iyz>-0.00030877032698579547</iyz>
+					<izz>0.1102369575489739</izz>
+				</inertia>
+			</inertial>
+			<collision name="base_link_collision">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/base_link.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</collision>
+			<visual name="base_link_visual">
+				<geometry>
+					<mesh>
+						<uri>model://frame_description/meshes/base_link.stl</uri>
+						<scale>0.001 0.001 0.001</scale>
+					</mesh>
+				</geometry>
+			</visual>
+		</link>
+		<joint name="RevRight" type="revolute">
+			<parent>base_link</parent>
+			<child>RightWheel</child>
+			<pose frame="">3.1110311517715863e-07 0.020324727806827668 3.698846121277466e-05 0 0 0</pose>
+			<axis>
+				<xyz>2.3592239273284576e-16 1.0000000000000018 2.2898349882893822e-15</xyz>
+			</axis>
+		</joint>
+		<joint name="RevLeft" type="revolute">
+			<parent>base_link</parent>
+			<child>LeftWheel</child>
+			<pose frame="">3.12609671102528e-07 -0.020217343537945586 3.716757869265841e-05 0 0 0</pose>
+			<axis>
+				<xyz>2.3592239273284576e-16 1.0000000000000018 -2.289834988289379e-15</xyz>
+			</axis>
+		</joint>
+		<joint name="laser" type="fixed">
+			<parent>base_link</parent>
+			<child>laser_link</child>
+			<pose frame="">-0.0369550628063658 0.026883487169068788 -0.03526812773283999 0 0 0</pose>
+		</joint>
+		<plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
+	      <left_joint>RevLeft</left_joint>
+	      <right_joint>RevRight</right_joint>
+	      <wheel_separation>0.2</wheel_separation>
+	      <wheel_diameter>0.1</wheel_diameter>
+	      <max_wheel_torque>20</max_wheel_torque>
+	      <max_wheel_acceleration>1.0</max_wheel_acceleration>
+	      <publish_odom>1</publish_odom>
+	      <publish_odom_tf>1</publish_odom_tf>
+	      <publish_wheel_tf>1</publish_wheel_tf>
+	      <odometry_frame>odom</odometry_frame>
+	      <robot_base_frame>base_link</robot_base_frame>
+	    </plugin>
+	</model>
+</sdf>

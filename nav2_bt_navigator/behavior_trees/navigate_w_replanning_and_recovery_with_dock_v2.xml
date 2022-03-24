@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="MainTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="MainTree">
+        <IfThenElse>
+            <Condition ID="IsBatteryLow" battery_topic="battery_status" is_voltage="False" min_battery="20"/>
+            <Control ID="RecoveryNode" name="DockingRecovery" number_of_retries="6">
+                <Control ID="PipelineSequence" name="DockingWithReplanning">
+                    <Decorator ID="RateController" hz="0.33">
+                        <Control ID="RecoveryNode" name="ComputePathToDock" number_of_retries="1">
+                            <Action ID="ComputePathToPose" goal="{dock}" name="ComputePathToDock" path="{path}" planner_id="GridBased" server_name="" server_timeout=""/>
+                            <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Context" server_timeout="" service_name="global_costmap/clear_entirely_global_costmap"/>
+                        </Control>
+                    </Decorator>
+                    <Control ID="PipelineSequence">
+                        <Control ID="RecoveryNode" name="FollowDock" number_of_retries="1">
+                            <Action ID="FollowPath" controller_id="FollowPath" path="{path}" server_name="" server_timeout=""/>
+                            <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Dock" server_timeout="" service_name="local_costmap/clear_entirely_local_costmap"/>
+                        </Control>
+                        <Action ID="DockAlign" spin_dist="10"/>
+                    </Control>
+                </Control>
+                <Control ID="RoundRobin" name="DockingRecoveryActions">
+                    <Sequence name="ClearingActions">
+                        <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Subtree-Dock" server_timeout="" service_name="local_costmap/clear_entirely_local_costmap"/>
+                        <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Subtree-Dock" server_timeout="" service_name="global_costmap/clear_entirely_global_costmap"/>
+                    </Sequence>
+                    <Action ID="Spin" server_name="" server_timeout="" spin_dist="1.57"/>
+                    <Action ID="Wait" server_name="" server_timeout="" wait_duration="5"/>
+                </Control>
+            </Control>
+            <Control ID="RecoveryNode" name="NavigateRecovery" number_of_retries="6">
+                <Control ID="PipelineSequence" name="NavigateWithReplanning">
+                    <Decorator ID="RateController" hz="0.333">
+                        <Control ID="RecoveryNode" name="ComputePathToPose" number_of_retries="1">
+                            <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased" server_name="" server_timeout=""/>
+                            <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Context" server_timeout="" service_name="global_costmap/clear_entirely_global_costmap"/>
+                        </Control>
+                    </Decorator>
+                    <Control ID="RecoveryNode" name="FollowPath" number_of_retries="1">
+                        <Action ID="FollowPath" controller_id="FollowPath" path="{path}" server_name="" server_timeout=""/>
+                        <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Context" server_timeout="" service_name="local_costmap/clear_entirely_local_costmap"/>
+                    </Control>
+                </Control>
+                <ReactiveFallback name="RecoveryFallback">
+                    <Condition ID="GoalUpdated"/>
+                    <Control ID="RoundRobin" name="RecoveryActions">
+                        <Sequence name="ClearingActions">
+                            <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Subtree" server_timeout="" service_name="local_costmap/clear_entirely_local_costmap"/>
+                            <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Subtree" server_timeout="" service_name="global_costmap/clear_entirely_global_costmap"/>
+                        </Sequence>
+                        <Action ID="Spin" server_name="" server_timeout="" spin_dist="1.57"/>
+                        <Action ID="Wait" server_name="" server_timeout="" wait_duration="5"/>
+                    </Control>
+                </ReactiveFallback>
+            </Control>
+        </IfThenElse>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <!-- <TreeNodesModel>
+        <Action ID="DockAlign">
+            <input_port name="spin_dist">Spin distance</input_port>
+        </Action>
+        <Action ID="ClearEntireCostmap">
+            <input_port name="server_timeout" type="std::chrono::duration&lt;long, std::ratio&lt;1l, 1000l&gt; &gt;"/>
+            <input_port name="service_name" type="std::string">please_set_service_name_in_BT_Node</input_port>
+        </Action>
+        <Action ID="ComputePathToPose">
+            <input_port name="goal" type="geometry_msgs::msg::PoseStamped_&lt;std::allocator&lt;void&gt; &gt;">Destination to plan to</input_port>
+            <output_port name="path" type="nav_msgs::msg::Path_&lt;std::allocator&lt;void&gt; &gt;">Path created by ComputePathToPose node</output_port>
+            <input_port name="planner_id" type="std::string"/>
+            <input_port name="server_name" type="std::string">Action server name</input_port>
+            <input_port name="server_timeout" type="std::chrono::duration&lt;long, std::ratio&lt;1l, 1000l&gt; &gt;"/>
+        </Action>
+        <Action ID="FollowPath">
+            <input_port name="controller_id" type="std::string"/>
+            <input_port name="path" type="nav_msgs::msg::Path_&lt;std::allocator&lt;void&gt; &gt;">Path to follow</input_port>
+            <input_port name="server_name" type="std::string">Action server name</input_port>
+            <input_port name="server_timeout" type="std::chrono::duration&lt;long, std::ratio&lt;1l, 1000l&gt; &gt;"/>
+        </Action>
+        <Condition ID="GoalUpdated"/>
+        <Condition ID="IsBatteryLow">
+            <input_port name="battery_topic" type="std::string">Battery topic</input_port>
+            <input_port name="is_voltage" type="bool">If true voltage will be used to check for low battery</input_port>
+            <input_port name="min_battery" type="double">Minimum battery percentage/voltage</input_port>
+        </Condition>
+        <Control ID="PipelineSequence"/>
+        <Decorator ID="RateController">
+            <input_port name="hz" type="double">Rate</input_port>
+        </Decorator>
+        <Control ID="RecoveryNode">
+            <input_port name="number_of_retries" type="int">Number of retries</input_port>
+        </Control>
+        <Control ID="RoundRobin"/>
+        <Action ID="Spin">
+            <input_port name="server_name" type="std::string">Action server name</input_port>
+            <input_port name="server_timeout" type="std::chrono::duration&lt;long, std::ratio&lt;1l, 1000l&gt; &gt;"/>
+            <input_port name="spin_dist" type="double">Spin distance</input_port>
+        </Action>
+        <Action ID="Wait">
+            <input_port name="server_name" type="std::string">Action server name</input_port>
+            <input_port name="server_timeout" type="std::chrono::duration&lt;long, std::ratio&lt;1l, 1000l&gt; &gt;"/>
+            <input_port name="wait_duration" type="int">Wait time</input_port>
+        </Action>
+    </TreeNodesModel> -->
+    <!-- ////////// -->
+</root>
+

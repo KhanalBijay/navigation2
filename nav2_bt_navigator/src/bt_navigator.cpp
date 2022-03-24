@@ -38,6 +38,7 @@ BtNavigator::BtNavigator()
   RCLCPP_INFO(get_logger(), "Creating");
 
   const std::vector<std::string> plugin_libs = {
+    "nav2_dock_align_action_bt_node",
     "nav2_compute_path_to_pose_action_bt_node",
     "nav2_follow_path_action_bt_node",
     "nav2_back_up_action_bt_node",
@@ -140,6 +141,7 @@ BtNavigator::on_configure(const rclcpp_lifecycle::State & /*state*/)
 
   // Get the BT filename to use from the node parameter
   get_parameter("default_bt_xml_filename", default_bt_xml_filename_);
+  RCLCPP_INFO(get_logger(), "loading XML file: %s", default_bt_xml_filename_.c_str());
 
   if (!loadBehaviorTree(default_bt_xml_filename_)) {
     RCLCPP_ERROR(get_logger(), "Error loading XML file: %s", default_bt_xml_filename_.c_str());

@@ -1,0 +1,321 @@
+<?xml version="1.0" ?>
+<robot name="chassis" xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12) * (h*h + d*d)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (w*w + d*d)}" iyz="0.0" izz="${(m/12) * (w*w + h*h)}"/>
+    </inertial>
+  </xacro:macro>
+  
+	<material name="white">
+    	<color rgba="1.0 1.0 1.0 1.0"/>
+  	</material>
+  	<material name="grey">
+    	<color rgba="0.5 0.5 0.5 1.0"/>
+  	</material>
+  	<material name="light_black">
+    	<color rgba="0.4 0.4 0.4 0.8"/>
+ 	</material>
+ 	<material name="black">
+      <color rgba="0.0 0.0 0.0 1.0"/>
+  	</material>
+	<link name="laser_link">
+		<origin xyz="-0.007483469883342291 0.0033754847892451894 0.11526812773283998" 
+			rpy ="0.0 -0.0 0.0"/>
+		<self_collide>false</self_collide>
+		<inertial>
+			<origin xyz="0.0 0.0 0.0" 
+			rpy ="0.0 -0.0 0.0"/>
+			<mass value ="1.3392997077577373"/>
+			<inertia
+				ixx="0.018429048296082495"
+				ixy="3.302403910604558e-05"
+				ixz="0.0013145447819121396"
+				iyy="0.01883678815921871"
+				iyz="-0.0005242139620616612"
+				izz="0.0011954551147790292"
+			/>
+		</inertial>
+		<collision name="laser_link_collision">
+			<origin xyz="0.0 0.0 0.0"  
+			rpy ="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh filename="package://frame_description/meshes/laser_link.stl" 
+				scale = "0.001 0.001 0.001"
+				/>
+			</geometry>
+		</collision>
+		<visual name="laser_link_visual">
+			<origin xyz="0.0 0.0 0.0" 
+			rpy ="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh filename="package://frame_description/meshes/laser_link.stl"
+				scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+			<material name="gray"/>
+		</visual>
+	</link>
+	<link name="RightWheel">
+		<self_collide>false</self_collide>
+		<origin xyz="3.111031151585624e-07 -0.1059566562533042 0.034328382688185076"
+				rpy="0 0 0"/>
+		<inertial>
+			<pose frame="">0.0 0.0 0.0 0 0 0</pose>
+			<mass value ="1.2739888254030707"/>
+			<inertia
+				ixx="0.01636384594146959"
+				ixy="4.206910184962898e-08"
+				ixz="1.6076041288179466e-08"
+				iyy="0.002328225274936997"
+				iyz="-0.004629195651435269"
+				izz="0.014860934929017086"
+			/>
+		</inertial>
+		<collision name="RightWheel_collision">
+			<origin xyz="0.0 0.0 0.0"
+				rpy="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh
+					filename="package://frame_description/meshes/RightWheel.stl"
+					scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+		</collision>
+		<visual name="RightWheel_visual">
+			<origin xyz="0.0 0.0 0.0"
+				rpy="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh
+					filename="package://frame_description/meshes/RightWheel.stl"
+					scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+	</link>
+	<link name="LeftWheel">
+		<self_collide>false</self_collide>
+		<inertial>
+			<pose frame="">0.0 0.0 0.0 0 0 0</pose>
+			<mass value ="1.2801581457812474"/>
+			<inertia
+				ixx="0.01647284402721014"
+				ixy="-4.206909664626679e-08"
+				ixz="1.6076039899143993e-08"
+				iyy="0.0023363366786385608"
+				iyz="0.004656361027733855"
+				izz="0.014962647178692922"
+			/>
+		</inertial>
+		<collision name="LeftWheel_collision">
+			<origin xyz="-0.0 0.0 0.0"
+				rpy="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh
+					filename="package://frame_description/meshes/LeftWheel.stl"
+					scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+		</collision>
+		<visual name="LeftWheel_visual">
+			<origin xyz="0.0 0.0 0.0"
+				rpy="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh
+					filename="package://frame_description/meshes/LeftWheel.stl"
+					scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+	</link>
+	<link name="base_link">
+		<self_collide>false</self_collide>
+		<inertial>
+			<origin xyz="0.0 0.0 0.0" 
+				rpy ="0.0 -0.0 0.0"/>
+			<mass value ="8.259457705691345"/>
+			<inertia
+				ixx="0.09131090467365767"
+				ixy="-8.933522937771983e-08"
+				ixz="-1.2694826969483603e-05"
+				iyy="0.06744203370802368"
+				iyz="-0.0003087703269857943"
+				izz="0.11023695754897395"
+			/>
+		</inertial>
+		<collision name="base_link_collision">
+			<origin xyz="1.989000889173202e-05 0.0010899148601920287 0.04703550929106814"
+				rpy="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh
+					filename="package://frame_description/meshes/base_link.stl"
+					scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+		</collision>
+		<visual name="base_link_visual">
+			<origin xyz="1.989000889173202e-05 0.0010899148601920287 0.04703550929106814"
+				rpy="0.0 -0.0 0.0"/>
+			<geometry>
+				<mesh
+					filename="package://frame_description/meshes/base_link.stl"
+					scale="0.001 0.001 0.001"
+				/>
+			</geometry>
+			<material name="light_black"/>
+		</visual>
+	</link>
+	
+	<link name="base_footprint"/>
+
+	<joint name="base_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="base_footprint"/>
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+	</joint>
+
+	<joint name="RevLeft" type="continuous">
+		<parent link="base_link"/>
+		<child link="LeftWheel"/>
+		<origin xyz="-3.1110311520736187e-07 0.1059566562533042 0.034328382688184965" 
+				rpy="0 0 0"/>
+		<axis xyz="-4.45302441122057e-77 -1.0 2.28983498828938e-15"/>
+	</joint>
+	<joint name="RevRight" type="continuous">
+		<parent link="base_link"/>
+		<child link="RightWheel"/>
+		<origin xyz="-3.126096711114887e-07 -0.10584927198442211 0.03432820357070518"
+		 		rpy="0 0 0"/>
+		<axis xyz="4.45302441122057e-77 -1.0 -2.28983498828938e-15"/>
+	</joint>
+	<joint name="laser" type="fixed">
+		<parent link="base_link"/>
+		<child link="laser_link"/>
+		<origin xyz="-0.007483469883342285 0.0033754847892451755 0.11526812773283997" 
+			rpy ="0.0 -0.0 0.0"/>
+	</joint>
+		
+
+	<link name="imu_link">
+	<visual>
+		<geometry>
+		<box size="0.01 0.01 0.01"/>
+		</geometry>
+	</visual>
+
+	<collision>
+		<geometry>
+		<box size="0.01 0.01 0.01"/>
+		</geometry>
+	</collision>
+
+	<xacro:box_inertia m="0.01" w="0.01" d="0.01" h="0.01"/>
+	</link>
+
+	<joint name="imu_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="imu_link"/>
+		<origin xyz="0 0 0.01" rpy="0.0 0.0 0.0"/>
+	</joint>
+	
+	<gazebo>
+	<plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
+		<!-- <ros>
+		<namespace>/demo</namespace>
+		</ros> -->
+
+		<!-- wheels -->
+		<left_joint>RevLeft</left_joint>
+		<right_joint>RevRight</right_joint>
+
+		<!-- kinematics -->
+		<wheel_separation>0.25</wheel_separation>
+		<wheel_diameter>0.2</wheel_diameter>
+
+		<!-- limits -->
+		<max_wheel_torque>20</max_wheel_torque>
+		<max_wheel_acceleration>1.0</max_wheel_acceleration>
+
+		<!-- output -->
+		<publish_odom>true</publish_odom>
+		<publish_odom_tf>true</publish_odom_tf>
+		<publish_wheel_tf>true</publish_wheel_tf>
+
+		<odometry_frame>odom</odometry_frame>
+		<robot_base_frame>base_link</robot_base_frame>
+	</plugin>
+	</gazebo>
+
+	<gazebo reference="imu_link">
+	<sensor name="imu_sensor" type="imu">
+	<plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+		<!-- <ros>
+			<namespace>/demo</namespace>
+			<remapping>~/out:=imu</remapping>
+		</ros> -->
+		<initial_orientation_as_reference>false</initial_orientation_as_reference>
+		</plugin>
+		<always_on>true</always_on>
+		<update_rate>100</update_rate>
+		<visualize>true</visualize>
+		<imu>
+		<angular_velocity>
+			<x>
+			<noise type="gaussian">
+				<mean>0.0</mean>
+				<stddev>2e-4</stddev>
+				<bias_mean>0.0000075</bias_mean>
+				<bias_stddev>0.0000008</bias_stddev>
+			</noise>
+			</x>
+			<y>
+			<noise type="gaussian">
+				<mean>0.0</mean>
+				<stddev>2e-4</stddev>
+				<bias_mean>0.0000075</bias_mean>
+				<bias_stddev>0.0000008</bias_stddev>
+			</noise>
+			</y>
+			<z>
+			<noise type="gaussian">
+				<mean>0.0</mean>
+				<stddev>2e-4</stddev>
+				<bias_mean>0.0000075</bias_mean>
+				<bias_stddev>0.0000008</bias_stddev>
+			</noise>
+			</z>
+		</angular_velocity>
+		<linear_acceleration>
+			<x>
+			<noise type="gaussian">
+				<mean>0.0</mean>
+				<stddev>1.7e-2</stddev>
+				<bias_mean>0.1</bias_mean>
+				<bias_stddev>0.001</bias_stddev>
+			</noise>
+			</x>
+			<y>
+			<noise type="gaussian">
+				<mean>0.0</mean>
+				<stddev>1.7e-2</stddev>
+				<bias_mean>0.1</bias_mean>
+				<bias_stddev>0.001</bias_stddev>
+			</noise>
+			</y>
+			<z>
+			<noise type="gaussian">
+				<mean>0.0</mean>
+				<stddev>1.7e-2</stddev>
+				<bias_mean>0.1</bias_mean>
+				<bias_stddev>0.001</bias_stddev>
+			</noise>
+			</z>
+		</linear_acceleration>
+		</imu>
+	</sensor>
+	</gazebo>
+
+</robot>

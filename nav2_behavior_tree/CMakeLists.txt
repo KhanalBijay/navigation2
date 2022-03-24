@@ -63,6 +63,9 @@ list(APPEND plugin_libs nav2_back_up_action_bt_node)
 add_library(nav2_spin_action_bt_node SHARED plugins/action/spin_action.cpp)
 list(APPEND plugin_libs nav2_spin_action_bt_node)
 
+add_library(nav2_dock_align_action_bt_node SHARED plugins/action/dock_align_action.cpp)
+list(APPEND plugin_libs nav2_dock_align_action_bt_node)
+
 add_library(nav2_wait_action_bt_node SHARED plugins/action/wait_action.cpp)
 list(APPEND plugin_libs nav2_wait_action_bt_node)
 

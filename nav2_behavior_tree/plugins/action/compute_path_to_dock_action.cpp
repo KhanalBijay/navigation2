@@ -15,29 +15,26 @@
 #include <memory>
 #include <string>
 
-#include "nav2_behavior_tree/plugins/action/compute_path_to_pose_action.hpp"
+#include "nav2_behavior_tree/plugins/action/compute_path_to_dock_action.hpp"
 
 namespace nav2_behavior_tree
 {
 
-ComputePathToPoseAction::ComputePathToPoseAction(
+ComputePathToDockAction::ComputePathToDockAction(
   const std::string & xml_tag_name,
   const std::string & action_name,
   const BT::NodeConfiguration & conf)
-: BtActionNode<nav2_msgs::action::ComputePathToPose>(xml_tag_name, action_name, conf)
+: BtActionNode<nav2_msgs::action::ComputePathToDock>(xml_tag_name, action_name, conf)
 {
 }
 
-void ComputePathToPoseAction::on_tick()
+void ComputePathToDockAction::on_tick()
 {
-  if(!getInput("goal", goal_.pose)){
-    goal_.pose.pose.position.x = 0.5;
-    goal_.pose.pose.position.y = 2.5;
-  }
+  getInput("goal", goal_.pose);
   getInput("planner_id", goal_.planner_id);
 }
 
-BT::NodeStatus ComputePathToPoseAction::on_success()
+BT::NodeStatus ComputePathToDockAction::on_success()
 {
   setOutput("path", result_.result->path);
 
@@ -57,10 +54,10 @@ BT_REGISTER_NODES(factory)
   BT::NodeBuilder builder =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {
-      return std::make_unique<nav2_behavior_tree::ComputePathToPoseAction>(
-        name, "compute_path_to_pose", config);
+      return std::make_unique<nav2_behavior_tree::ComputePathToDockAction>(
+        name, "compute_path_to_dock", config);
     };
 
-  factory.registerBuilder<nav2_behavior_tree::ComputePathToPoseAction>(
-    "ComputePathToPose", builder);
+  factory.registerBuilder<nav2_behavior_tree::ComputePathToDockAction>(
+    "ComputePathToDock", builder);
 }

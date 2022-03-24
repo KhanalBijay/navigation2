@@ -1,0 +1,55 @@
+<root main_tree_to_execute="MainTree">
+  <!-- ////////// -->
+  <BehaviorTree ID="MainTree">
+      <IfThenElse>
+          <Condition ID="IsBatteryLow" battery_topic="battery_status" is_voltage="False" min_battery="20"/>
+          <Control ID="RecoveryNode" name="DockingRecovery" number_of_retries="6">
+              <Control ID="PipelineSequence" name="DockingWithReplanning">
+                <Decorator ID="RateController" hz="0.33">
+                  <Control ID="RecoveryNode" name="ComputePathToDock" number_of_retries="1">
+                      <Action ID="ComputePathToPose" name="ComputePathToDock" goal="{dock}" path="{path}" planner_id="GridBased"/>
+                      <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Context" service_name="global_costmap/clear_entirely_global_costmap"/>
+                  </Control>
+                </Decorator>
+                <Control ID="RecoveryNode" name="FollowDock" number_of_retries="1">
+                    <Action ID="FollowPath" controller_id="FollowPath" path="{path}"/>
+                    <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Dock" service_name="local_costmap/clear_entirely_local_costmap"/>
+                </Control>
+              </Control>
+              <Control ID="RoundRobin" name="DockingRecoveryActions">
+                  <Sequence name="ClearingActions">
+                      <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Subtree-Dock" service_name="local_costmap/clear_entirely_local_costmap"/>
+                      <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Subtree-Dock" service_name="global_costmap/clear_entirely_global_costmap"/>
+                  </Sequence>
+                  <Action ID="Spin" spin_dist="1.57"/>
+                  <Action ID="Wait" wait_duration="5"/>
+              </Control>
+          </Control>
+          <Control ID="RecoveryNode" name="NavigateRecovery" number_of_retries="6">
+              <Control ID="PipelineSequence" name="NavigateWithReplanning">
+                  <Decorator ID="RateController" hz="0.333">
+                      <Control ID="RecoveryNode" name="ComputePathToPose" number_of_retries="1">
+                          <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased"/>
+                          <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Context" service_name="global_costmap/clear_entirely_global_costmap"/>
+                      </Control>
+                  </Decorator>
+                  <Control ID="RecoveryNode" name="FollowPath" number_of_retries="1">
+                      <Action ID="FollowPath" controller_id="FollowPath" path="{path}"/>
+                      <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Context" service_name="local_costmap/clear_entirely_local_costmap"/>
+                  </Control>
+              </Control>
+              <ReactiveFallback name="RecoveryFallback">
+                  <Condition ID="GoalUpdated"/>
+                  <Control ID="RoundRobin" name="RecoveryActions">
+                      <Sequence name="ClearingActions">
+                          <Action ID="ClearEntireCostmap" name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/>
+                          <Action ID="ClearEntireCostmap" name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap"/>
+                      </Sequence>
+                      <Action ID="Spin" spin_dist="1.57"/>
+                      <Action ID="Wait" wait_duration="5"/>
+                  </Control>
+              </ReactiveFallback>
+          </Control>
+      </IfThenElse>
+  </BehaviorTree>
+</root>

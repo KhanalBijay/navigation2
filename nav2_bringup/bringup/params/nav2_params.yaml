@@ -58,6 +58,7 @@ bt_navigator:
     groot_zmq_server_port: 1667
     default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"
     plugin_lib_names:
+    - nav2_dock_align_action_bt_node
     - nav2_compute_path_to_pose_action_bt_node
     - nav2_follow_path_action_bt_node
     - nav2_back_up_action_bt_node
@@ -65,6 +66,7 @@ bt_navigator:
     - nav2_wait_action_bt_node
     - nav2_clear_costmap_service_bt_node
     - nav2_is_stuck_condition_bt_node
+    - nav2_is_battery_low_condition_bt_node
     - nav2_goal_reached_condition_bt_node
     - nav2_goal_updated_condition_bt_node
     - nav2_initial_pose_received_condition_bt_node
@@ -96,6 +98,8 @@ controller_server:
     goal_checker_plugin: "goal_checker"
     controller_plugins: ["FollowPath"]
 
+    FollowPath:
+      plugin: "nav2_dock_align_controller::DockAlignController"
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
@@ -108,7 +112,7 @@ controller_server:
       yaw_goal_tolerance: 0.25
       stateful: True
     # DWB parameters
-    FollowPath:
+    DockAlign:
       plugin: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
       min_vel_x: 0.0
